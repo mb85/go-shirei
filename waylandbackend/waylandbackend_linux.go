@@ -13,6 +13,7 @@ import (
 	"go.hasen.dev/shirei/internal/wayland/wlclient"
 	zxdg "go.hasen.dev/shirei/internal/wayland/xdg"
 	"go.hasen.dev/shirei/internal/wayland/xdgdecoration"
+	"go.hasen.dev/shirei/internal/wayland/xdgforeign"
 
 	g "go.hasen.dev/generic"
 	"go.hasen.dev/shirei"
@@ -234,6 +235,8 @@ func (*handler) HandleRegistryGlobal(ev wl.RegistryGlobalEvent) {
 		bindToplevelIconManager(ev.Name, 1) // hand the compositor a real icon image
 	case xdgdecoration.Interface:
 		bindDecorationManager(ev.Name, 1) // let the compositor draw the titlebar
+	case xdgforeign.Interface:
+		bindExporter(ev.Name, 1) // so portal dialogs can attach to the window
 	case "wl_data_device_manager":
 		v := ev.Version
 		if v > 3 {
@@ -298,6 +301,7 @@ func createWindow() {
 	xdgToplevel.SetAppId(appID())
 	setToplevelIcon()
 	requestServerSideDecorations()
+	exportToplevel()
 	if compositorVer >= 3 { // set_buffer_scale exists from wl_compositor v3
 		surface.SetBufferScale(int32(windowScale)) // apply any scale learned during connect
 	}

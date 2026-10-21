@@ -8,6 +8,10 @@
 > - Wayland server-side decorations (xdg-decoration-unstable-v1): on
 >   compositors that offer them (KDE, sway and others) the window gets the
 >   desktop's own titlebar and controls; elsewhere Shirei's own titlebar stays.
+> - Wayland window export (xdg-foreign-unstable-v2): `waylandbackend.Context`
+>   has `ExportedHandle()`, so portal dialogs can attach to the app window.
+> - Line wrapping keeps digits and punctuation with their word, so "FAT32"
+>   or "x64" no longer wrap in the middle.
 
 
 Shirei is a cross-platform GUI framework for Go, designed as a lightweight alternative to

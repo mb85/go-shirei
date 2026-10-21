@@ -29,4 +29,13 @@ func (Context) XdgToplevel() *zxdg.Toplevel {
 	return xdgToplevel
 }
 
+// ExportedHandle is the main window's xdg-foreign export handle, for
+// parenting portal dialogs as "wayland:<handle>". It is empty when the
+// compositor does not support xdg-foreign-unstable-v2 and until the
+// compositor has answered, which happens while the window opens. Call it on
+// the UI thread.
+func (Context) ExportedHandle() string {
+	return exportedHandle
+}
+
 var _ shirei.BackendContext = Context{}
