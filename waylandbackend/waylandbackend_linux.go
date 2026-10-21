@@ -12,6 +12,7 @@ import (
 	"go.hasen.dev/shirei/internal/wayland/wl"
 	"go.hasen.dev/shirei/internal/wayland/wlclient"
 	zxdg "go.hasen.dev/shirei/internal/wayland/xdg"
+	"go.hasen.dev/shirei/internal/wayland/xdgdecoration"
 
 	g "go.hasen.dev/generic"
 	"go.hasen.dev/shirei"
@@ -231,6 +232,8 @@ func (*handler) HandleRegistryGlobal(ev wl.RegistryGlobalEvent) {
 		bindCursorShapeManager(ev.Name, 1) // real themed cursor (preferred over our arrow)
 	case "xdg_toplevel_icon_manager_v1":
 		bindToplevelIconManager(ev.Name, 1) // hand the compositor a real icon image
+	case xdgdecoration.Interface:
+		bindDecorationManager(ev.Name, 1) // let the compositor draw the titlebar
 	case "wl_data_device_manager":
 		v := ev.Version
 		if v > 3 {
@@ -294,6 +297,7 @@ func createWindow() {
 	// .desktop file lookup that supplies the icon — see waylanddesktop_linux.go).
 	xdgToplevel.SetAppId(appID())
 	setToplevelIcon()
+	requestServerSideDecorations()
 	if compositorVer >= 3 { // set_buffer_scale exists from wl_compositor v3
 		surface.SetBufferScale(int32(windowScale)) // apply any scale learned during connect
 	}

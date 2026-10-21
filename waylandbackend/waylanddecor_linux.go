@@ -22,13 +22,14 @@ import (
 // Host.WindowSize so the app body matches the requested size. Compositor
 // configures and interactive resizes already speak in full-surface size.
 //
-// (Server-side decorations via the xdg-decoration protocol — real titlebars on
-// KDE/sway — are a later add; they'd also let us skip CSD where granted.)
+// Where the compositor offers xdg-decoration (KDE, sway, ...), the Flasher fork
+// asks it to draw the titlebar instead and turns all of this off once it agrees
+// (see waylandssd_linux.go).
 
 const titlebarHeight = 34
 
-// csdEnabled gates the client-side titlebar/resize. Always on for now; once
-// xdg-decoration negotiation lands this turns off when the compositor draws SSD.
+// csdEnabled gates the client-side titlebar/resize. It starts on and turns
+// off when the compositor agrees to draw server-side decorations.
 var csdEnabled = true
 
 // wrapFrame is the backend's own chrome wrapper (core knows nothing of

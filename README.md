@@ -1,4 +1,14 @@
-# Shirei
+# Shirei (Flasher fork)
+
+> This is an altered version of Shirei, maintained for the Flasher USB image
+> writer. It is not the original software; upstream is
+> [hasenj/go-shirei](https://github.com/hasenj/go-shirei). The `flasher` branch
+> is upstream v0.8.0 plus:
+>
+> - Wayland server-side decorations (xdg-decoration-unstable-v1): on
+>   compositors that offer them (KDE, sway and others) the window gets the
+>   desktop's own titlebar and controls; elsewhere Shirei's own titlebar stays.
+
 
 Shirei is a cross-platform GUI framework for Go, designed as a lightweight alternative to
 web-based approaches, with a focus on development ergonomics.
