@@ -12,6 +12,8 @@
 >   has `ExportedHandle()`, so portal dialogs can attach to the app window.
 > - Line wrapping keeps digits and punctuation with their word, so "FAT32"
 >   or "x64" no longer wrap in the middle.
+> - A space where a line wraps stays at the end of that line instead of
+>   starting the next one.
 
 
 Shirei is a cross-platform GUI framework for Go, designed as a lightweight alternative to
