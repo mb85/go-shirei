@@ -239,3 +239,27 @@ func TestShapeCacheSharesUnwrappedAcrossWidths(t *testing.T) {
 		t.Fatalf("quantized widths: hits=%d shapeHits=%d (want 1/1)", ShapeStats.Hits, ShapeStats.ShapeHits)
 	}
 }
+
+// TestWrapKeepsWordsWhole wraps text at many widths and checks that every
+// line starts at a word boundary: at a space, after a space, or after a
+// hyphen that precedes a letter. Digits and punctuation used to start a new
+// script run, which let "FAT32" wrap as "FAT" and "32".
+func TestWrapKeepsWordsWhole(t *testing.T) {
+	attrs := requireTextShaping(t)
+	ui.Host.WindowScale = 1
+	const text = "write FAT32 media for x64 Win11 25H2 as UEFI-bootable 32GB installer at -10 dB"
+	runes := []rune(text)
+	full := ShapeText(text, attrs).Lines[0].Width
+	for w := float32(20); w < full; w += 3 {
+		for i, line := range ShapeTextMax(text, attrs, w).Lines {
+			if i == 0 || len(line.Segments) == 0 || len(line.Segments[0].Glyphs) == 0 {
+				continue
+			}
+			start := int(line.Segments[0].Glyphs[0].Cluster)
+			if runes[start] == ' ' || runes[start-1] == ' ' || runes[start-1] == '-' {
+				continue
+			}
+			t.Errorf("width %v: line %d starts mid-word: %q", w, i, string(runes[start:]))
+		}
+	}
+}

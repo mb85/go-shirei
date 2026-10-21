@@ -1066,12 +1066,24 @@ func produceShapedSegments(runes []rune, dirs []Direction, base TextStyleAttrs, 
 			lineNo++
 		}
 
-		// special case!!
-		if segmentNext.sc == language.Inherited {
+		// Segment boundaries are where lines may wrap, so characters shared
+		// between scripts (digits, punctuation) and combining marks join the
+		// run around them: "FAT32", "x64" and "25H2" stay whole. A run that so
+		// far holds only shared characters ("32" in "32GB") takes the script
+		// of the first letter after it.
+		switch {
+		case segmentNext.sc == language.Common || segmentNext.sc == language.Inherited:
 			segmentNext.sc = segment.sc
+		case segment.sc == language.Common && !segment.isSpace:
+			segment.sc = segmentNext.sc
 		}
 
-		if segmentNext != segment {
+		// Joining shared characters would otherwise also remove the wrap
+		// point after a hyphen, so keep it when a letter follows
+		// ("UEFI-|bootable", but not "-10").
+		breakAfterHyphen := isHyphen(runes[i-1]) && unicode.IsLetter(runes[i])
+
+		if segmentNext != segment || breakAfterHyphen {
 			length := i - start
 			allSegments = append(allSegments, shapeSegment(segment, runes, start, length))
 			segment = segmentNext
@@ -1084,6 +1096,8 @@ func produceShapedSegments(runes []rune, dirs []Direction, base TextStyleAttrs, 
 
 	return allSegments
 }
+
+func isHyphen(r rune) bool { return r == '-' || r == '\u2010' }
 
 func lineBreakShapedSegments(allSegments []GlyphsSegment, style TextStyleAttrs, maxWidth float32) []ShapedTextLine {
 	lineHeight := func(height float32) float32 {
