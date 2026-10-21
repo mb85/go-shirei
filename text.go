@@ -1115,7 +1115,10 @@ func lineBreakShapedSegments(allSegments []GlyphsSegment, style TextStyleAttrs, 
 		var height float32
 		var start int
 		for i, segment := range allSegments {
-			var widthOverflow = i > start && maxWidth > 0 && segment.Width+widthAcc > maxWidth
+			// Spaces never start a line: one that runs past the edge hangs
+			// at the end of the line it follows, without adding to its width.
+			var hang = segment.isSpace && maxWidth > 0 && segment.Width+widthAcc > maxWidth
+			var widthOverflow = i > start && maxWidth > 0 && !segment.isSpace && segment.Width+widthAcc > maxWidth
 			var forceLineBreak = segment.lineNo > prevLineNo
 			if widthOverflow || forceLineBreak {
 				lines = append(lines, ShapedTextLine{
@@ -1127,7 +1130,9 @@ func lineBreakShapedSegments(allSegments []GlyphsSegment, style TextStyleAttrs, 
 				widthAcc = 0
 				height = 0
 			}
-			widthAcc += segment.Width
+			if !hang {
+				widthAcc += segment.Width
+			}
 			height = max(height, segment.Height)
 			prevLineNo = segment.lineNo
 		}
