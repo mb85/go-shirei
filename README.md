@@ -17,6 +17,8 @@
 > - A quick click is never lost: when a button's press and release arrive
 >   before a frame runs, the release waits for the next frame instead of
 >   replacing the press. Backends report buttons through `PostMouseAction`.
+> - On Windows the title bar turns dark with the app's dark scheme
+>   (`widgets.IsDarkMode`), instead of staying light above dark content.
 
 
 Shirei is a cross-platform GUI framework for Go, designed as a lightweight alternative to

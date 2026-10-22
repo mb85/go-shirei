@@ -170,6 +170,10 @@ func SetDarkMode(dark bool) {
 	}
 }
 
+// IsDarkMode reports whether SetDarkMode last selected the dark scheme.
+// Backends read it to match window chrome the OS draws, such as the title bar.
+func IsDarkMode() bool { return darkMode }
+
 // UseSurface applies the active scheme's background, text, and border colors.
 // Use it in Attrs or in ModAttrs before adding children. Text inherits through
 // plain nested containers. Fonts, border width, and layout stay caller-controlled.

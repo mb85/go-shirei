@@ -445,6 +445,7 @@ func produceFrame(cw, ch int) (out shirei.FrameOutputData, skipped bool) {
 	flushAccessAction()
 
 	out = shirei.RunFrameFn(frameFn)
+	syncTitleBarTheme()
 	updateAccess(out.Access, out.AccessChanged)
 	updateImeCandidateWindow()
 
