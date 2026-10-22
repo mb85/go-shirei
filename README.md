@@ -19,6 +19,10 @@
 >   replacing the press. Backends report buttons through `PostMouseAction`.
 > - On Windows the title bar turns dark with the app's dark scheme
 >   (`widgets.IsDarkMode`), instead of staying light above dark content.
+> - Files dropped from other apps arrive as `FrameInput.DroppedFiles`, on
+>   Wayland and Windows (X11 not yet). Wayland also sets
+>   `Input.FileDragOver` while files are dragged over the window. An
+>   elevated Windows app still accepts drops from Explorer.
 
 
 Shirei is a cross-platform GUI framework for Go, designed as a lightweight alternative to

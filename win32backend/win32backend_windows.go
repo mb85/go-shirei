@@ -180,6 +180,7 @@ func createWindow() {
 		panic("win32backend: CreateWindowEx failed: " + errStr(err))
 	}
 	hwnd = syscall.Handle(h)
+	acceptFileDrops()
 
 	if winQuiet {
 		procShowWindow.Call(uintptr(hwnd), swShowNoActivate)
@@ -294,6 +295,11 @@ func wndProc(hWnd, msg, wparam, lparam uintptr) uintptr {
 		return 0
 	case wmMbuttonup:
 		onMouse(lparam, int(shirei.MouseTertiary), int(shirei.MouseRelease))
+		noteInput()
+		return 0
+
+	case wmDropfiles:
+		onDropFiles(wparam)
 		noteInput()
 		return 0
 

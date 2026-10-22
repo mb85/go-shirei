@@ -31,6 +31,12 @@ type InputStateData struct {
 	// cannot re-engage a control after the finger has lifted.
 	MouseFromTouch bool
 
+	// FileDragOver is true while files dragged from another app are over the
+	// window, with MousePoint following the drag, so a drop target can show
+	// that it will take them. Backends that only learn of the drop itself
+	// (Win32) leave it false.
+	FileDragOver bool
+
 	// AudioInterrupted is set by the platform audio backend when the OS
 	// suspends output (phone call, Siri, another app taking the session on
 	// iOS, etc.) and cleared when the interruption ends. Apps and media
@@ -57,6 +63,10 @@ type FrameInputData struct {
 	Key KeyCode
 
 	Text string // text inputted this frame (could come from IME completion)
+
+	// DroppedFiles holds the paths of files dropped on the window from
+	// another app this frame. MousePoint is where they were dropped.
+	DroppedFiles []string
 
 	// Touch edges this frame (ids only). Counts are the number of valid
 	// leading entries; remaining slots are unspecified.

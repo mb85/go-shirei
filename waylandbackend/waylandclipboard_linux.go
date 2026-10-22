@@ -36,6 +36,7 @@ func openURL(url string) {
 
 var (
 	dataDevMgr      *wl.DataDeviceManager
+	dataDevVersion  uint32
 	dataDevice      *wl.DataDevice
 	clipboardSource *wl.DataSource
 	clipboardText   string
@@ -51,6 +52,7 @@ var clipMimes = []string{"text/plain;charset=utf-8", "text/plain", "UTF8_STRING"
 
 func bindDataDeviceManager(name, version uint32) {
 	dataDevMgr = wlclient.RegistryBindDataDeviceManagerInterface(registry, name, version)
+	dataDevVersion = version
 	ensureDataDevice()
 }
 
@@ -61,7 +63,7 @@ func ensureDataDevice() {
 	}
 	if dd, err := dataDevMgr.GetDataDevice(seat); err == nil {
 		dataDevice = dd
-		wlclient.DataDeviceAddListener(dataDevice, h) // track the selection for paste
+		wlclient.DataDeviceAddListener(dataDevice, h) // selection for paste, drags for drops
 	}
 }
 
@@ -120,16 +122,10 @@ func (*handler) HandleDataSourceAction(wl.DataSourceActionEvent)                
 // when the selection is cleared).
 func (*handler) HandleDataDeviceSelection(ev wl.DataDeviceSelectionEvent) {
 	if currentOffer != nil && currentOffer != ev.Id {
-		currentOffer.Destroy()
+		destroyOffer(currentOffer)
 	}
 	currentOffer = ev.Id
 }
-
-func (*handler) HandleDataDeviceDataOffer(wl.DataDeviceDataOfferEvent) {} // mimes unused
-func (*handler) HandleDataDeviceEnter(wl.DataDeviceEnterEvent)         {}
-func (*handler) HandleDataDeviceLeave(wl.DataDeviceLeaveEvent)         {}
-func (*handler) HandleDataDeviceMotion(wl.DataDeviceMotionEvent)       {}
-func (*handler) HandleDataDeviceDrop(wl.DataDeviceDropEvent)           {}
 
 // requestPaste fetches the current selection as text and stashes it for injection
 // next frame.

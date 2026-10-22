@@ -46,7 +46,7 @@ func frameHasTransientInput() bool {
 	fi := ui.Host.FrameInput
 	return fi.AccessAction.Kind != 0 || fi.Mouse != 0 || fi.Key != 0 || fi.Text != "" ||
 		fi.Scroll != (Vec2{}) || fi.Motion != (Vec2{}) ||
-		fi.TouchesBeganCount > 0 || fi.TouchesEndedCount > 0
+		fi.TouchesBeganCount > 0 || fi.TouchesEndedCount > 0 || len(fi.DroppedFiles) > 0
 }
 
 // SetBackendWake registers a function the input-command kernel calls after
