@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/cli/browser"
+	"go.hasen.dev/shirei"
 	"go.hasen.dev/shirei/internal/wayland/wl"
 	"go.hasen.dev/shirei/internal/wayland/wlclient"
 )
@@ -64,6 +65,7 @@ func ensureDataDevice() {
 	if dd, err := dataDevMgr.GetDataDevice(seat); err == nil {
 		dataDevice = dd
 		wlclient.DataDeviceAddListener(dataDevice, h) // selection for paste, drags for drops
+		shirei.GetHost().FileDrops = true
 	}
 }
 

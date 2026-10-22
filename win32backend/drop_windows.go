@@ -33,6 +33,7 @@ var (
 // unless it lets the drop messages through its message filter.
 func acceptFileDrops() {
 	procDragAccept.Call(uintptr(hwnd), 1)
+	shirei.GetHost().FileDrops = true
 	if procAllowWindow.Find() != nil {
 		return
 	}

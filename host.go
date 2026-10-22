@@ -171,6 +171,10 @@ type Host struct {
 	PaintGen       uint64
 	ImageScaleTime time.Duration
 
+	// FileDrops is set by backends that deliver FrameInput.DroppedFiles, so
+	// an app only invites drops where they work.
+	FileDrops bool
+
 	// HeadlessRender is set for RenderToPNG / snapshot paths.
 	HeadlessRender bool
 
