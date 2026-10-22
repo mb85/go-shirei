@@ -24,6 +24,10 @@
 >   backend delivers them. Wayland also sets `Input.FileDragOver` while
 >   files are dragged over the window. An elevated Windows app still
 >   accepts drops from Explorer.
+> - Flat buttons: no push-down lip, gradient or outline, rounder corners,
+>   and a plain grey fill for ordinary buttons. The light and dark schemes
+>   use one accent blue for primary buttons, selection, progress and checks,
+>   and selection controls have no gradients.
 
 
 Shirei is a cross-platform GUI framework for Go, designed as a lightweight alternative to

@@ -199,11 +199,11 @@ type ButtonLook struct {
 	PadScale f32
 }
 
-// DefaultButtonLook returns the regular elevated button chrome.
+// DefaultButtonLook returns the regular flat button chrome.
 func DefaultButtonLook() ButtonLook {
 	return ButtonLook{
 		TextSize: ButtonDefaultSize,
-		PushDown: 0.5,
+		PushDown: 0,
 		PadScale: 1,
 	}
 }
@@ -365,7 +365,7 @@ func ButtonStyled(label string, attrs ButtonAttrs, look ButtonLook, style Button
 	// idle — see below): this is what makes a default button's height
 	// match a default TextInput's (attrs.FontSize + attrs.FontSize).
 	var padv = (attrs.TextSize - pushDown) / 2 * padScale
-	var br = attrs.TextSize * 0.3
+	var br = attrs.TextSize * 0.5
 
 	var action bool
 	Container(Attrs(), func() {
@@ -398,7 +398,13 @@ func ButtonStyled(label string, attrs ButtonAttrs, look ButtonLook, style Button
 			shadowPadding[PAD_BOTTOM] = pushDown
 		}
 
-		Container(Attrs(BackgroundVec(paint.Elevation), PadVec(shadowPadding), Corners(br+1)), func() {
+		// The lip only exists with a push-down; without one, painting the
+		// elevation would leave a halo around the face's corners.
+		lip := Attrs(PadVec(shadowPadding), Corners(br+1))
+		if pushDown > 0 {
+			lip.Background = paint.Elevation
+		}
+		Container(lip, func() {
 			var face = Attrs(Row, CrossMid, Corners(br), Pad2(padv, padh), Gap(padh/2), BackgroundVec(paint.Background), GradVec(paint.Gradient),
 				BorderColorVec(paint.Border), BorderWidth(borderWidth))
 			Container(face, func() {

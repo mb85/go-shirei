@@ -195,13 +195,15 @@ func UseSurface(role SurfaceRole) AttrsFn {
 
 // LightColorScheme returns a cool light scheme with blue primary actions.
 func LightColorScheme() ColorScheme {
+	// One accent for primary buttons, selection, progress and checks, dark
+	// enough for white text. Buttons are flat fills without outlines.
+	accent := Vec4{210, 75, 45, 1}
 	disabled := ButtonPaint{
-		Background: Vec4{214, 20, 90, 1},
-		Text:       Vec4{0, 0, 40, 0.5},
-		Border:     Vec4{0, 0, 75, 1},
-		Elevation:  Vec4{214, 20, 90, 1},
+		Background: Vec4{220, 14, 96, 1},
+		Text:       Vec4{0, 0, 40, 0.38},
+		Elevation:  Vec4{220, 14, 96, 1},
 	}
-	border := Vec4{214, 20, 20, 0.2}
+	border := Vec4{}
 	return completeColorScheme(ColorScheme{
 		Surfaces: SurfaceStyles{
 			Canvas:  SurfaceColors{Background: Vec4{220, 16, 95, 1}, Text: Vec4{220, 20, 18, 1}, Border: Vec4{220, 16, 78, 1}},
@@ -209,11 +211,11 @@ func LightColorScheme() ColorScheme {
 			Toolbar: SurfaceColors{Background: Vec4{214, 24, 27, 1}, Text: Vec4{214, 20, 97, 1}, Border: Vec4{214, 24, 18, 1}},
 		},
 		Buttons: ButtonStyles{
-			Default:     lightButtonStyle(Vec4{214, 20, 98, 1}, Vec4{0, 0, 10, 1}, border, disabled),
-			Primary:     lightButtonStyle(Vec4{204, 70, 40, 1}, Vec4{0, 0, 100, 1}, border, disabled),
+			Default:     lightButtonStyle(Vec4{220, 14, 90, 1}, Vec4{220, 20, 18, 1}, border, disabled),
+			Primary:     lightButtonStyle(accent, Vec4{0, 0, 100, 1}, border, disabled),
 			Destructive: lightButtonStyle(Vec4{0, 65, 42, 1}, Vec4{0, 0, 100, 1}, border, disabled),
 		},
-		CheckBox:  lightSelectionStyle(AccentBlue, Vec4{0, 0, 100, 1}, Vec4{0, 0, 100, 1}),
+		CheckBox:  lightSelectionStyle(accent, Vec4{0, 0, 100, 1}, Vec4{0, 0, 100, 1}),
 		FocusRing: Vec4{210, 85, 52, 1},
 	})
 }
@@ -251,16 +253,16 @@ func lightButtonStyle(face, text, border Vec4, disabled ButtonPaint) ButtonStyle
 		Elevation:  Vec4{face[0], face[1], face[2] - 24, face[3]},
 	}
 	style := ButtonStyle{Normal: paint, Hovered: paint, Pressed: paint, Disabled: disabled}
-	style.Hovered.Background[2] += 3
-	style.Pressed.Background[2] -= 3
+	style.Hovered.Background[2] -= 3
+	style.Pressed.Background[2] -= 7
 	ClampColorVec(&style.Hovered.Background)
 	ClampColorVec(&style.Pressed.Background)
 	return style
 }
 
 func lightSelectionStyle(accent, indicator, empty Vec4) SelectionStyle {
-	unselected := SelectionPaint{Background: empty, Gradient: Vec4{0, 0, -6, 0}, Border: accent, Indicator: indicator}
-	selected := SelectionPaint{Background: accent, Gradient: Vec4{0, 0, 6, 0}, Border: accent, Indicator: indicator}
+	unselected := SelectionPaint{Background: empty, Border: accent, Indicator: indicator}
+	selected := SelectionPaint{Background: accent, Border: accent, Indicator: indicator}
 	style := SelectionStyle{
 		Unselected: SelectionStateStyle{Normal: unselected, Hovered: unselected, Pressed: unselected},
 		Selected:   SelectionStateStyle{Normal: selected, Hovered: selected, Pressed: selected},

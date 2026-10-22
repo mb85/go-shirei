@@ -17,18 +17,18 @@ func darkColorScheme(hue, saturation float32, text, accent, focus, danger Vec4) 
 	border := neutral(40)
 	mark := Vec4{text[0], text[1], 98, 1}
 	disabled := ButtonPaint{
-		Background: neutral(22), Text: neutral(53), Border: neutral(30), Elevation: neutral(15),
+		Background: neutral(22), Text: neutral(53), Elevation: neutral(15),
 	}
 	button := func(face Vec4) ButtonStyle {
-		paint := ButtonPaint{Background: face, Text: mark, Border: border,
+		paint := ButtonPaint{Background: face, Text: mark,
 			Elevation: Vec4{face[0], face[1], face[2] - 10, 1}}
 		style := ButtonStyle{Normal: paint, Hovered: paint, Pressed: paint, Disabled: disabled}
 		style.Hovered.Background[2] += 4
 		style.Pressed.Background[2] -= 4
 		return style
 	}
-	empty := SelectionPaint{Background: neutral(18), Gradient: Vec4{0, 0, -3, 0}, Border: neutral(55), Indicator: mark}
-	selected := SelectionPaint{Background: accent, Gradient: Vec4{0, 0, -4, 0}, Border: focus, Indicator: mark}
+	empty := SelectionPaint{Background: neutral(18), Border: neutral(55), Indicator: mark}
+	selected := SelectionPaint{Background: accent, Border: accent, Indicator: mark}
 	selection := SelectionStyle{
 		Unselected: SelectionStateStyle{Normal: empty, Hovered: empty, Pressed: empty},
 		Selected:   SelectionStateStyle{Normal: selected, Hovered: selected, Pressed: selected},
@@ -56,7 +56,7 @@ func darkColorScheme(hue, saturation float32, text, accent, focus, danger Vec4) 
 	}
 	s.Switch.Unselected.Hovered.Background = neutral(38)
 	s.Switch.Unselected.Pressed.Background = neutral(26)
-	s.Slider.Track, s.Progress.Fill = focus, focus
+	s.Slider.Track, s.Progress.Fill = accent, accent
 	s.Slider.Handle, s.Slider.HandleGradient, s.Slider.HandleBorder = neutral(90), Vec4{}, neutral(62)
 	s.TextInput.Background = neutral(10)
 	s.TextInput.HoveredBorder = neutral(56)
