@@ -198,6 +198,18 @@ func GetFrameInput() *FrameInputData {
 	return &ui.Host.FrameInput
 }
 
+// PostMouseAction records a button press or release for the next frame.
+// Backends call it instead of writing FrameInput.Mouse: a release that
+// arrives before any frame has seen its press (a quick tap, or injected
+// input) is held back for the following frame, so the press is not lost.
+func PostMouseAction(a MouseAction) {
+	if ui.Host.FrameInput.Mouse == 0 && len(ui.heldMouse) == 0 {
+		ui.Host.FrameInput.Mouse = a
+		return
+	}
+	ui.heldMouse = append(ui.heldMouse, a)
+}
+
 func defaultHost() Host {
 	return Host{
 		WindowScale:      1,

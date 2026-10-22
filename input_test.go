@@ -30,6 +30,39 @@ func TestInputRequestsFollowUp(t *testing.T) {
 	}
 }
 
+// TestQuickClickNotLost: a press and release posted before any frame runs
+// still reach a button as a press frame followed by a release frame.
+func TestQuickClickNotLost(t *testing.T) {
+	ResetInputSession()
+	ui.Host.WindowSize = Vec2{400, 300}
+	scope := new(int)
+	var pressed int
+	frame := func() FrameOutputData {
+		return RunFrameFn(func() {
+			ContainerWithKey(scope, Attrs(FixSize(100, 100)), func() {
+				if PressAction() {
+					pressed++
+				}
+			})
+		})
+	}
+	ui.Host.Input.MousePoint = Vec2{50, 50}
+	frame() // establish the button's geometry for hover
+
+	PostMouseAction(MouseClick)
+	PostMouseAction(MouseRelease)
+	if out := frame(); !out.NextFrameRequested {
+		t.Fatal("frame holding back a release must request another")
+	}
+	frame()
+	if pressed != 1 {
+		t.Fatalf("PressAction fired %d times, want 1", pressed)
+	}
+	if out := frame(); out.NextFrameRequested {
+		t.Fatal("no input left, so the frame should idle")
+	}
+}
+
 func TestClickStreakDetection(t *testing.T) {
 	ResetInputSession()
 	ui.Host.WindowSize = Vec2{400, 300}

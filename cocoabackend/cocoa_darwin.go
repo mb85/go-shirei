@@ -379,9 +379,9 @@ func onMouse(x, y float64, action, button int) {
 
 	switch action {
 	case mouseDown:
-		shirei.GetFrameInput().Mouse = shirei.MouseClick
+		shirei.PostMouseAction(shirei.MouseClick)
 	case mouseUp:
-		shirei.GetFrameInput().Mouse = shirei.MouseRelease
+		shirei.PostMouseAction(shirei.MouseRelease)
 	}
 }
 

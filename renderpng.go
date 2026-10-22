@@ -36,6 +36,7 @@ func ResetInputSession() {
 	ui.lastClickTime = time.Time{}
 	g.Reset(&ui.lastClickPoint)
 	ui.clickStreak = 0
+	ui.heldMouse = ui.heldMouse[:0]
 }
 
 // HeadlessRender (Host.HeadlessRender) is true only while RenderToImage is

@@ -116,7 +116,11 @@ func HandleInputCommand(line string) string {
 }
 
 func inputCmdBeginInject() {
+	// Keep a button action no frame has seen yet, so a mouse_up sent
+	// straight after mouse_down is held back rather than replacing it.
+	mouse := ui.Host.FrameInput.Mouse
 	g.Reset(&ui.Host.FrameInput)
+	ui.Host.FrameInput.Mouse = mouse
 	ui.Host.Input.Modifiers = 0
 	RequestNextFrame()
 	wakeBackend()
@@ -157,7 +161,7 @@ func inputCmdMouse(a MouseAction, rest string) string {
 		btn = parsed
 	}
 	inputCmdBeginInject()
-	ui.Host.FrameInput.Mouse = a
+	PostMouseAction(a)
 	ui.Host.Input.MouseButton = btn
 	return ""
 }

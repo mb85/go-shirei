@@ -89,6 +89,9 @@ type UI struct {
 	lastClickTime      time.Time
 	lastClickPoint     Vec2
 	clickStreak        int
+	// heldMouse queues button actions that arrived while this frame's
+	// FrameInput.Mouse was already taken (see PostMouseAction).
+	heldMouse []MouseAction
 
 	// Container pool (see swapContainerSlab / newContainer): two slabs
 	// alternate per frame pass, so a container handed out in pass N stays

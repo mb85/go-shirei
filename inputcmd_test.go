@@ -39,8 +39,9 @@ func TestInputCommandMoveMouseKeyText(t *testing.T) {
 	if got := HandleInputCommand("mouse_up secondary"); got != "" {
 		t.Fatalf("mouse_up: %q", got)
 	}
-	if ui.Host.FrameInput.Mouse != MouseRelease {
-		t.Fatal("mouse_up did not set MouseRelease")
+	// No frame has seen the press yet, so the release waits for the next one.
+	if ui.Host.FrameInput.Mouse != MouseClick || !slices.Equal(ui.heldMouse, []MouseAction{MouseRelease}) {
+		t.Fatalf("mouse_up straight after mouse_down: Mouse=%v held=%v", ui.Host.FrameInput.Mouse, ui.heldMouse)
 	}
 	if ui.Host.Input.MouseButton != MouseSecondary {
 		t.Fatalf("MouseButton=%v want secondary", ui.Host.Input.MouseButton)

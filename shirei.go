@@ -441,6 +441,13 @@ func RunFrameFn(frameFn FrameFn) FrameOutputData {
 
 	var output FrameOutputData
 
+	// Hand the next held-back button action to the following frame.
+	if len(ui.heldMouse) > 0 {
+		ui.Host.FrameInput.Mouse = ui.heldMouse[0]
+		ui.heldMouse = append(ui.heldMouse[:0], ui.heldMouse[1:]...)
+		hadInput = true
+	}
+
 	output.Access = ui.access
 	output.AccessChanged = !slices.Equal(ui.access, ui.publishedAccess)
 	ui.publishedAccess = append(ui.publishedAccess[:0], ui.access...)

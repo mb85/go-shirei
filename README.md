@@ -14,6 +14,9 @@
 >   or "x64" no longer wrap in the middle.
 > - A space where a line wraps stays at the end of that line instead of
 >   starting the next one.
+> - A quick click is never lost: when a button's press and release arrive
+>   before a frame runs, the release waits for the next frame instead of
+>   replacing the press. Backends report buttons through `PostMouseAction`.
 
 
 Shirei is a cross-platform GUI framework for Go, designed as a lightweight alternative to

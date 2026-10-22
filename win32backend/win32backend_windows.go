@@ -657,10 +657,10 @@ func onMouse(lparam uintptr, button, action int) {
 	switch action {
 	case int(shirei.MouseClick):
 		shirei.GetInputState().MouseButton = shirei.MouseButton(button)
-		shirei.GetFrameInput().Mouse = shirei.MouseClick
+		shirei.PostMouseAction(shirei.MouseClick)
 	case int(shirei.MouseRelease):
 		shirei.GetInputState().MouseButton = shirei.MouseButton(button)
-		shirei.GetFrameInput().Mouse = shirei.MouseRelease
+		shirei.PostMouseAction(shirei.MouseRelease)
 	}
 }
 

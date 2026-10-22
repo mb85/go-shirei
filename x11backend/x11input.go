@@ -182,7 +182,7 @@ func setMouse(x, y float32) {
 func mouseButton(button shirei.MouseButton, action shirei.MouseAction, x, y int16) {
 	setMouse(float32(x), float32(y))
 	shirei.GetInputState().MouseButton = button
-	shirei.GetFrameInput().Mouse = action
+	shirei.PostMouseAction(action)
 }
 
 func scroll(dx, dy float32) {

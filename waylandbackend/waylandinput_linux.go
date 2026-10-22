@@ -91,9 +91,9 @@ func (*handler) HandlePointerButton(ev wl.PointerButtonEvent) {
 	}
 	shirei.GetInputState().MouseButton = btn
 	if ev.State == wl.PointerButtonStatePressed {
-		shirei.GetFrameInput().Mouse = shirei.MouseClick
+		shirei.PostMouseAction(shirei.MouseClick)
 	} else {
-		shirei.GetFrameInput().Mouse = shirei.MouseRelease
+		shirei.PostMouseAction(shirei.MouseRelease)
 	}
 	dirty = true
 }
