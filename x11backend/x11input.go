@@ -75,6 +75,9 @@ func handleEvent(ev xgb.Event) bool {
 		return false
 
 	case xproto.ClientMessageEvent:
+		if handled, frame := handleXdnd(e); handled {
+			return frame
+		}
 		// WM_DELETE_WINDOW: the close button.
 		if e.Type == wmProtocols && e.Format == 32 && xproto.Atom(e.Data.Data32[0]) == wmDelete {
 			g.ExitWithCleanup(0)
@@ -157,6 +160,9 @@ func handleEvent(ev xgb.Event) bool {
 	case xproto.SelectionNotifyEvent:
 		// A paste we requested came back; read it and produce a frame to inject it.
 		lastEventTime = e.Time
+		if handled, frame := handleDropData(e); handled {
+			return frame
+		}
 		return handleSelectionNotify(e)
 
 	case xproto.SelectionClearEvent:

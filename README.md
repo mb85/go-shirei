@@ -20,9 +20,9 @@
 > - On Windows the title bar turns dark with the app's dark scheme
 >   (`widgets.IsDarkMode`), instead of staying light above dark content.
 > - Files dropped from other apps arrive as `FrameInput.DroppedFiles`, on
->   Wayland and Windows (X11 not yet); `Host.FileDrops` says whether the
->   backend delivers them. Wayland also sets `Input.FileDragOver` while
->   files are dragged over the window. An elevated Windows app still
+>   Wayland, X11 (XDND) and Windows; `Host.FileDrops` says whether the
+>   backend delivers them. Wayland and X11 also set `Input.FileDragOver`
+>   while files are dragged over the window. An elevated Windows app still
 >   accepts drops from Explorer.
 > - Flat buttons: no push-down lip, gradient or outline, rounder corners,
 >   and a plain grey fill for ordinary buttons. The light and dark schemes

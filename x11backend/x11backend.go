@@ -147,6 +147,8 @@ func createWindow() {
 	xproto.ChangeProperty(X, xproto.PropModeReplace, win,
 		wmProtocols, xproto.AtomAtom, 32, 1, delBytes)
 
+	setupDrops()
+
 	gc, err = xproto.NewGcontextId(X)
 	if err != nil {
 		panic("x11backend: NewGcontextId: " + err.Error())
